@@ -5,9 +5,11 @@ import os
 def generate_account_number():
     return random.randint(1000000000, 9999999999)
 
+balance = 0.0
+
 account_number = generate_account_number()
 
-def create_account(account_number, name, dob, address, phone, email):
+def create_account(account_number, name, dob, address, phone, email,balance):
     print("Creating a new account...")
 
     account = {
@@ -16,7 +18,8 @@ def create_account(account_number, name, dob, address, phone, email):
         "dob": dob,
         "address": address,
         "phone": phone,
-        "email": email
+        "email": email,
+        "balance": balance
     }
 
     file_name = "details.json"
