@@ -1,14 +1,15 @@
 # Transaction class for handling banking transactions
+import Account as ac
 file='details.json'
 
+account=ac.generate_account_number()
 
-class Transaction:
-    def __init__(self, account, amount, transaction_type):
+def __init__(self, account, amount, transaction_type):
         self.account = account
         self.amount = amount
         self.transaction_type = transaction_type
 
-    def execute(self):
+def execute(self):
         if self.transaction_type == "deposit":
             self.account.balance += self.amount
         elif self.transaction_type == "withdrawal":

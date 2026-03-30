@@ -1,6 +1,7 @@
 # Project Mini Banking System
 
 import Account as ac
+import Transction as tc
 class Account:
     def __init__(self, name, dob, address, phone, email, balance):
         self.name = name
@@ -14,6 +15,18 @@ class Account:
     def create_account(self):
         account_details = ac.create_account(self.account_number, self.name, self.dob, self.address, self.phone, self.email, self.balance)
         return account_details
+
+    def deposit(self, amount):
+        self.balance = tc.deposit(self.account_number, amount, self.balance)
+        return self.balance
+
+    def withdraw(self, amount):
+        self.balance = tc.withdraw(self.account_number, amount, self.balance)
+        return self.balance
+
+    def transfer(self, target_account, amount):
+        self.balance = tc.transfer(self.account_number, target_account, amount, self.balance)
+        return self.balance
 # Example usage
 if __name__ == "__main__":  
     name = input("Enter your name: ")
@@ -27,3 +40,35 @@ if __name__ == "__main__":
     account_details = new_account.create_account()
     print("Account created successfully!")
     print(account_details)
+
+    while True:
+        print("\nChoose Transaction:")
+        print("1. Deposit")
+        print("2. Withdraw")
+        print("3. Transfer")
+        print("4. Exit")
+
+        choice = input("Enter choice: ")
+
+        if choice == "1":
+            amount = float(input("Enter amount to deposit: "))
+            new_balance = new_account.deposit(amount)
+            print("Updated Balance:", new_balance)
+
+        elif choice == "2":
+            amount = float(input("Enter amount to withdraw: "))
+            new_balance = new_account.withdraw(amount)
+            print("Updated Balance:", new_balance)
+
+        elif choice == "3":
+            target_account = input("Enter target account number: ")
+            amount = float(input("Enter amount to transfer: "))
+            new_balance = new_account.transfer(target_account, amount)
+            print("Updated Balance:", new_balance)
+
+        elif choice == "4":
+            print("Exiting...")
+            break
+
+        else:
+            print("Invalid choice. Try again.")
