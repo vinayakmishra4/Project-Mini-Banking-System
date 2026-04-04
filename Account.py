@@ -9,11 +9,10 @@ balance = 0.0
 
 account_number = generate_account_number()
 
-def create_account(account_number, name, dob, address, phone, email,balance):
+def create_account(account_number, name, dob, address, phone, email, balance):
     print("Creating a new account...")
 
     account = {
-        "acc_number": account_number,
         "name": name,
         "dob": dob,
         "address": address,
@@ -29,10 +28,10 @@ def create_account(account_number, name, dob, address, phone, email,balance):
         with open(file_name, "r") as f:
             data = json.load(f)
     else:
-        data = []
+        data = {}
 
-    # Add new account
-    data.append(account)
+    # Add new account with account_number as key
+    data[account_number] = account
 
     # Save back to JSON
     with open(file_name, "w") as f:
@@ -40,7 +39,7 @@ def create_account(account_number, name, dob, address, phone, email,balance):
 
     print("Account created successfully!")
 
-    return account
+    return {account_number: account}
 
 def cardpin(account_number):
     print("Setting up card PIN...")

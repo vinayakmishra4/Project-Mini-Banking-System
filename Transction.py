@@ -1,21 +1,40 @@
-# Transaction class for handling banking transactions
+# Transaction.py
 import Account as ac
-file='details.json'
 
-account=ac.generate_account_number()
+account_number = ac.generate_account_number()
+def deposit(account_number, amount, balance):
+    if amount <= 0:
+        print("Invalid deposit amount")
+        return balance
 
-def __init__(self, account, amount, transaction_type):
-        self.account = account
-        self.amount = amount
-        self.transaction_type = transaction_type
+    balance += amount
+    print(f"₹{amount} deposited successfully in account {account_number}")
+    return balance
 
-def execute(self):
-        if self.transaction_type == "deposit":
-            self.account.balance += self.amount
-        elif self.transaction_type == "withdrawal":
-            if self.account.balance >= self.amount:
-                self.account.balance -= self.amount
-            else:
-                print("Insufficient funds")
-        else:
-            print("Invalid transaction type")
+
+def withdraw(account_number, amount, balance):
+    if amount <= 0:
+        print("Invalid withdrawal amount")
+        return balance
+
+    if balance >= amount:
+        balance -= amount
+        print(f"₹{amount} withdrawn successfully from account {account_number}")
+    else:
+        print("Insufficient balance")
+
+    return balance
+
+
+def transfer(account_number, target_account, amount, balance):
+    if amount <= 0:
+        print("Invalid transfer amount")
+        return balance
+
+    if balance >= amount:
+        balance -= amount
+        print(f"₹{amount} transferred from {account_number} to {target_account}")
+    else:
+        print("Insufficient balance")
+
+    return balance
