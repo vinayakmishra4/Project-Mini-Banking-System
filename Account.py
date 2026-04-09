@@ -68,3 +68,20 @@ def cardpin(account_number):
 
     print(f"PIN for account {account_number} set successfully!")
     return pin
+
+def view_account_details(account_number):
+    print("Viewing account details...")
+
+    # File to store account details
+    file_name = "details.xlsx"
+
+    # Load existing data if Excel file exists
+    if os.path.exists(file_name):
+        df = pd.read_excel(file_name)
+        account_details = df[df["account_number"] == account_number]
+        if not account_details.empty:
+            print(account_details.to_string(index=False))
+        else:
+            print(f"No account found with number {account_number}.")
+    else:
+        print("No accounts found. Please create an account first.")
