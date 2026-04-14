@@ -4,7 +4,7 @@
 
 # Importing required functions from other modules
 from Account import cardpin, create_account, view_account_details, generate_account_number
-from Update import update_menu
+import Update as up
 from Transction import trasnctionmenu, transaction_history
 
 
@@ -57,7 +57,7 @@ class Account:
         elif choice == '3':
             print("Update Account Details")
             account_number = input("Enter account number to update details: ")
-            update_menu(account_number)
+            up.AccountManager.update_menu(account_number)
 
         # -----------------------------
         # 4. VIEW ACCOUNT DETAILS
