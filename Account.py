@@ -99,20 +99,23 @@ def cardpin(account_number):
 # Purpose : Display stored details of a specific account
 # ------------------------------------------------------------
 def view_account_details(account_number):
+    import os
+    import pandas as pd
+
     print("Viewing account details...")
 
     file_name = "details.xlsx"
 
-    # Check if account database exists
     if os.path.exists(file_name):
-        df = pd.read_excel(file_name)
+        df = pd.read_excel(file_name, dtype={"account_number": str})
 
-        # Filter rows matching the given account number
+        df["account_number"] = df["account_number"].str.strip()
+        account_number = str(account_number).strip()
+
         account_details = df[df["account_number"] == account_number]
 
-        # If account exists, display it
         if not account_details.empty:
-            print(account_details.to_string(index=False))
+            print(account_details.to_string(index=True))
         else:
             print(f"No account found with number {account_number}.")
     else:
