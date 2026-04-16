@@ -3,9 +3,10 @@
 # ==============================
 
 # Importing required functions from other modules
+
 from Account import cardpin, create_account, view_account_details, generate_account_number
 import Update as up
-from Transction import trasnctionmenu, transaction_history
+from Transction import transaction_history,transaction_menu
 
 
 class Account:
@@ -27,7 +28,7 @@ class Account:
         print("7. Exit")
 
         # Taking user input for menu selection
-        choice = input("Enter your choice (1/2/3/...): ")
+        choice = input()
 
         # -----------------------------
         # 1. CREATE ACCOUNT
@@ -57,7 +58,7 @@ class Account:
         elif choice == '3':
             print("Update Account Details")
             account_number = input("Enter account number to update details: ")
-            up.AccountManager.update_menu(account_number)
+            up.AccountManager.update_menu(account_number,index=True)
 
         # -----------------------------
         # 4. VIEW ACCOUNT DETAILS
