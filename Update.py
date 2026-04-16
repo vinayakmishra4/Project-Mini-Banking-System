@@ -77,12 +77,12 @@ class AccountManager:
             elif choice == "2":
                 self.update_field(
                     index,
-                    "Date of Birth",
+                    "dob",
                     input("Enter new DOB (YYYY-MM-DD): ")
                 )
 
             elif choice == "3":
-                self.update_field(index, "Phone", input("Enter new phone: "))
+                self.update_field(index, "phone", input("Enter new phone: "))
 
             elif choice == "4":
                 self.update_field(index, "Address", input("Enter new address: "))
