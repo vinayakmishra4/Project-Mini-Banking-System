@@ -58,7 +58,8 @@ class Account:
         elif choice == '3':
             print("Update Account Details")
             account_number = input("Enter account number to update details: ")
-            up.AccountManager.update_menu(account_number,index=True)
+            manager=up.AccountManager('details.xlsx')  # Create an instance of AccountManager to access update functions
+            manager.update_account(account_number)  # Call the update_account method with the provided account number
 
         # -----------------------------
         # 4. VIEW ACCOUNT DETAILS
@@ -77,7 +78,7 @@ class Account:
 
             # ⚠️ NOTE: 'balance' is not defined here in this scope.
             # This may cause an error unless balance is managed inside trasnctionmenu()
-            trasnctionmenu(account_number, balance, transaction_history)
+            transaction_menu(account_number, balance, transaction_history)
 
         # -----------------------------
         # 6. TRANSACTION HISTORY
