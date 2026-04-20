@@ -1,76 +1,122 @@
+# importing necessary libraries
 import random
-import json
+import pandas as pd
 import os
 
+
+# ------------------------------------------------------------
+# Function: generate_account_number
+# Purpose : Generate a random 10-digit account number
+# ------------------------------------------------------------
 def generate_account_number():
-    return random.randint(1000000000, 9999999999)
+    # randint ensures a 10-digit number between given range
+    # converted to string so it can be safely stored in Excel
+    return str(random.randint(1000000000, 9999999999))
 
-balance = 0.0
 
-account_number = generate_account_number()
-
-def create_account(account_number, name, dob, address, phone, email,balance):
+# ------------------------------------------------------------
+# Function: create_account
+# Purpose : Create a new bank account and save details in Excel
+# ------------------------------------------------------------
+def create_account(account_number, name, dob, address, phone, email, balance):
     print("Creating a new account...")
 
+    # Store all user inputs in a dictionary (one record)
     account = {
-        "acc_number": account_number,
+        "account_number": account_number,
         "name": name,
         "dob": dob,
         "address": address,
         "phone": phone,
         "email": email,
-        "balance": balance
+        "balance": balance,
     }
 
-    file_name = "details.json"
+    # Excel file where all account records are stored
+    file_name = "details.xlsx"
 
-    # Load existing data
+    # If file already exists, load it; otherwise create empty structure
     if os.path.exists(file_name):
-        with open(file_name, "r") as f:
-            data = json.load(f)
+        df = pd.read_excel(file_name)
     else:
-        data = []
+        df = pd.DataFrame(columns=[
+            "account_number", "name", "dob",
+            "address", "phone", "email", "balance"
+        ])
 
-    # Add new account
-    data.append(account)
+    # Add new account as a new row
+    df = pd.concat([df, pd.DataFrame([account])], ignore_index=True)
 
-    # Save back to JSON
-    with open(file_name, "w") as f:
-        json.dump(data, f, indent=4)
+    # Save updated data back to Excel
+    df.to_excel(file_name, index=False)
 
-    print("Account created successfully!")
-
+    print(f"Account {account_number} created successfully!")
     return account
 
+
+# ------------------------------------------------------------
+# Function: cardpin
+# Purpose : Set or update a 4-digit PIN for an account
+# ------------------------------------------------------------
 def cardpin(account_number):
     print("Setting up card PIN...")
 
-    pin = int(input("Enter a 4-digit PIN: "))
+    # Take PIN input from user
+    pin = input("Enter a 4-digit PIN: ")
 
-    while len(str(pin)) != 4 or not isinstance(pin, int):
+    # Validate PIN: must be exactly 4 digits and numeric
+    while len(pin) != 4 or not pin.isdigit():
         print("Invalid PIN. Please enter a 4-digit number.")
-        pin = int(input("Enter a 4-digit PIN: "))
+        pin = input("Enter a 4-digit PIN: ")
 
-    file_name = "account_pin.json"
+    # File where PINs are stored
+    pin_file = "pin.xlsx"
 
-    pin_data = {
-        "acc_number": account_number,
-        "pin": pin
-    }
-
-    # Load existing pins
-    if os.path.exists(file_name):
-        with open(file_name, "r") as f:
-            data = json.load(f)
+    # Load existing PIN data or create new structure
+    if os.path.exists(pin_file):
+        df_pin = pd.read_excel(pin_file)
     else:
-        data = []
+        df_pin = pd.DataFrame(columns=["account_number", "pin"])
 
-    data.append(pin_data)
+    # Remove old PIN if account already exists (update case)
+    df_pin = df_pin[df_pin["account_number"] != account_number]
 
-    # Save JSON
-    with open(file_name, "w") as f:
-        json.dump(data, f, indent=4)
+    # Add new PIN entry
+    df_pin = pd.concat(
+        [df_pin, pd.DataFrame([{"account_number": account_number, "pin": pin}])],
+        ignore_index=True
+    )
 
-    print("Card PIN set successfully!")
+    # Save updated PIN data
+    df_pin.to_excel(pin_file, index=False)
 
+    print(f"PIN for account {account_number} set successfully!")
     return pin
+
+
+# ------------------------------------------------------------
+# Function: view_account_details
+# Purpose : Display stored details of a specific account
+# ------------------------------------------------------------
+def view_account_details(account_number):
+    import os
+    import pandas as pd
+
+    print("Viewing account details...")
+
+    file_name = "details.xlsx"
+
+    if os.path.exists(file_name):
+        df = pd.read_excel(file_name, dtype={"account_number": str})
+
+        df["account_number"] = df["account_number"].str.strip()
+        account_number = str(account_number).strip()
+
+        account_details = df[df["account_number"] == account_number]
+
+        if not account_details.empty:
+            print(account_details.to_string(index=True))
+        else:
+            print(f"No account found with number {account_number}.")
+    else:
+        print("No accounts found. Please create an account first.")
