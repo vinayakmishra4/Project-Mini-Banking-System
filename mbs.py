@@ -17,11 +17,21 @@ class Account:
         return account_details
 
     def deposit(self, amount):
-        self.balance = tc.deposit(self.account_number, amount, self.balance)
+        if amount <= 0:
+            raise ValueError("Deposit amount must be positive")
+        new_balance = tc.deposit(self.account_number, amount)
+        if new_balance is None:
+            raise Exception("Deposit failed")
+        self.balance = new_balance
         return self.balance
 
     def withdraw(self, amount):
-        self.balance = tc.withdraw(self.account_number, amount, self.balance)
+        if amount <= 0:
+            raise ValueError("Withdrawal amount must be positive")
+        new_balance = tc.withdraw(self.account_number, amount, self.balance)
+        if new_balance is None:
+            raise Exception("Withdrawal failed")
+        self.balance = new_balance
         return self.balance
 
     def transfer(self, target_account, amount):

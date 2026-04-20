@@ -4,18 +4,28 @@ file='details.json'
 
 account=ac.generate_account_number()
 
-def __init__(self, account, amount, transaction_type):
-        self.account = account
-        self.amount = amount
-        self.transaction_type = transaction_type
+# Account class
+class Account:
+    def __init__(self, account , balance):
+        self.account_number = account
+        self.balance = balance
 
-def execute(self):
-        if self.transaction_type == "deposit":
-            self.account.balance += self.amount
-        elif self.transaction_type == "withdrawal":
-            if self.account.balance >= self.amount:
-                self.account.balance -= self.amount
-            else:
-                print("Insufficient funds")
-        else:
-            print("Invalid transaction type")
+
+# Deposit function
+def deposit(account, amount):
+    if amount > 0:
+        account.balance += amount
+        print(f"Deposited {amount}. New balance: {account.balance}")
+    else:
+        print("Invalid deposit amount")
+
+
+# Withdrawal function
+def withdraw(account, amount):
+    if amount <= 0:
+        print("Invalid withdrawal amount")
+    elif account.balance >= amount:
+        account.balance -= amount
+        print(f"Withdrew {amount}. New balance: {account.balance}")
+    else:
+        print("Insufficient funds") 
