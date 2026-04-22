@@ -1,84 +1,104 @@
-# Project Mini Banking System
+# ==============================
+# Mini Bank System (Console App)
+# ==============================
 
-import Account as ac
-import Transction as tc
+# Importing required functions from other modules
+
+from Account import cardpin, create_account, view_account_details, generate_account_number
+import Update as up
+from Transction import transaction_history,transaction_menu
+
+
 class Account:
-    def __init__(self, name, dob, address, phone, email, balance):
-        self.name = name
-        self.dob = dob
-        self.address = address
-        self.phone = phone
-        self.email = email
-        self.balance = balance
-        self.account_number = ac.generate_account_number()
-        self.pin = ac.cardpin(self.account_number)
-    def create_account(self):
-        account_details = ac.create_account(self.account_number, self.name, self.dob, self.address, self.phone, self.email, self.balance)
-        return account_details
+    # Program starts here (runs immediately when file is executed)
+    
+    print("Welcome to the Mini Bank System!")
 
-    def deposit(self, amount):
-        if amount <= 0:
-            raise ValueError("Deposit amount must be positive")
-        new_balance = tc.deposit(self.account_number, amount)
-        if new_balance is None:
-            raise Exception("Deposit failed")
-        self.balance = new_balance
-        return self.balance
-
-    def withdraw(self, amount):
-        if amount <= 0:
-            raise ValueError("Withdrawal amount must be positive")
-        new_balance = tc.withdraw(self.account_number, amount, self.balance)
-        if new_balance is None:
-            raise Exception("Withdrawal failed")
-        self.balance = new_balance
-        return self.balance
-
-    def transfer(self, target_account, amount):
-        self.balance = tc.transfer(self.account_number, target_account, amount, self.balance)
-        return self.balance
-# Example usage
-if __name__ == "__main__":  
-    name = input("Enter your name: ")
-    dob = input("Enter your date of birth (YYYY-MM-DD): ")
-    address = input("Enter your address: ")
-    phone = input("Enter your phone number: ")
-    email = input("Enter your email: ")
-    balance = float(input("Enter your initial balance: "))
-
-    new_account = Account(name, dob, address, phone, email, balance)
-    account_details = new_account.create_account()
-    print("Account created successfully!")
-    print(account_details)
-
+    # Infinite loop to keep the menu running until user exits
     while True:
-        print("\nChoose Transaction:")
-        print("1. Deposit")
-        print("2. Withdraw")
-        print("3. Transfer")
-        print("4. Exit")
 
-        choice = input("Enter choice: ")
+        # Displaying main menu options
+        print("\nPlease select an option:")
+        print("1. Create Account")
+        print("2. Set Card PIN")
+        print("3. Update Account Details")
+        print("4. View Account Details")
+        print("5. Make a Transaction")
+        print("6. Transaction History")
+        print("7. Exit")
 
-        if choice == "1":
-            amount = float(input("Enter amount to deposit: "))
-            new_balance = new_account.deposit(amount)
-            print("Updated Balance:", new_balance)
+        # Taking user input for menu selection
+        choice = input()
 
-        elif choice == "2":
-            amount = float(input("Enter amount to withdraw: "))
-            new_balance = new_account.withdraw(amount)
-            print("Updated Balance:", new_balance)
+        # -----------------------------
+        # 1. CREATE ACCOUNT
+        # -----------------------------
+        if choice == '1':
+            account_number = generate_account_number()  # auto-generate account number
+            name = input("Enter name: ")
+            dob = input("Enter date of birth (YYYY-MM-DD): ")
+            address = input("Enter address: ")
+            phone = input("Enter phone number: ")
+            email = input("Enter email: ")
+            balance = float(input("Enter initial balance: "))
 
-        elif choice == "3":
-            target_account = input("Enter target account number: ")
-            amount = float(input("Enter amount to transfer: "))
-            new_balance = new_account.transfer(target_account, amount)
-            print("Updated Balance:", new_balance)
+            # Create and store account details
+            create_account(account_number, name, dob, address, phone, email, balance)
 
-        elif choice == "4":
-            print("Exiting...")
+        # -----------------------------
+        # 2. SET CARD PIN
+        # -----------------------------
+        elif choice == '2':
+            account_number = input("Enter account number to set PIN: ")
+            cardpin(account_number)
+
+        # -----------------------------
+        # 3. UPDATE ACCOUNT DETAILS
+        # -----------------------------
+        elif choice == '3':
+            print("Update Account Details")
+            account_number = input("Enter account number to update details: ")
+            manager=up.AccountManager('details.xlsx')  # Create an instance of AccountManager to access update functions
+            manager.update_account(account_number)  # Call the update_account method with the provided account number
+
+        # -----------------------------
+        # 4. VIEW ACCOUNT DETAILS
+        # -----------------------------
+        elif choice == '4':
+            print("View Account Details")
+            account_number = input("Enter account number to view details: ")
+            view_account_details(account_number)
+
+        # -----------------------------
+        # 5. MAKE A TRANSACTION
+        # -----------------------------
+        elif choice == '5':
+            print("Make a transaction")
+            account_number = input("Enter account number to perform transaction: ")
+
+            # ⚠️ NOTE: 'balance' is not defined here in this scope.
+            # This may cause an error unless balance is managed inside trasnctionmenu()            
+            transaction_menu(account_number, balance, transaction_history)
+
+        # -----------------------------
+        # 6. TRANSACTION HISTORY
+        # -----------------------------
+        elif choice == '6':
+            print("Transaction History")
+            account_number = input("Enter account number to view transaction history: ")
+
+            # Displays past transactions for the account
+            transaction_history(account_number)
+
+        # -----------------------------
+        # 7. EXIT PROGRAM
+        # -----------------------------
+        elif choice == '7':
+            print("Thank you for using the Mini Bank System. Goodbye!")
             break
 
+        # -----------------------------
+        # INVALID INPUT HANDLING
+        # -----------------------------
         else:
-            print("Invalid choice. Try again.")
+            print("Invalid choice. Please try again.")
