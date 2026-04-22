@@ -6,7 +6,7 @@
 
 from Account import cardpin, create_account, view_account_details, generate_account_number
 import Update as up
-from Transction import transaction_history,transaction_menu
+from Transction import transaction_menu
 
 
 class Account:
