@@ -5,8 +5,8 @@
 # Importing required functions from other modules
 
 from Account import cardpin, create_account, view_account_details, generate_account_number
-import Update as up
 from Transction import transaction_menu
+import Update as up
 
 
 class Account:
@@ -24,8 +24,7 @@ class Account:
         print("3. Update Account Details")
         print("4. View Account Details")
         print("5. Make a Transaction")
-        print("6. Transaction History")
-        print("7. Exit")
+        print("6. Exit")
 
         # Taking user input for menu selection
         choice = input()
@@ -75,25 +74,14 @@ class Account:
         elif choice == '5':
             print("Make a transaction")
             account_number = input("Enter account number to perform transaction: ")
-
             # ⚠️ NOTE: 'balance' is not defined here in this scope.
             # This may cause an error unless balance is managed inside trasnctionmenu()            
             transaction_menu(account_number, balance, transaction_history)
 
         # -----------------------------
-        # 6. TRANSACTION HISTORY
+        # 6. EXIT PROGRAM
         # -----------------------------
         elif choice == '6':
-            print("Transaction History")
-            account_number = input("Enter account number to view transaction history: ")
-
-            # Displays past transactions for the account
-            transaction_history(account_number)
-
-        # -----------------------------
-        # 7. EXIT PROGRAM
-        # -----------------------------
-        elif choice == '7':
             print("Thank you for using the Mini Bank System. Goodbye!")
             break
 
