@@ -7,6 +7,7 @@
 from Account import cardpin, create_account, view_account_details, generate_account_number
 from Transction import transaction_menu
 import Update as up
+from Transction import Account as TxAccount  # import correctly
 
 
 class Account:
@@ -23,7 +24,7 @@ class Account:
         print("2. Set Card PIN")
         print("3. Update Account Details")
         print("4. View Account Details")
-        print("5. Make a Transaction")
+        print("5. Transaction")
         print("6. Exit")
 
         # Taking user input for menu selection
@@ -71,14 +72,10 @@ class Account:
         # -----------------------------
         # 5. MAKE A TRANSACTION
         # -----------------------------
-        elif choice == '5':
-            print("Make a transaction")
-            account_number = input("Enter account number to perform transaction: ")
-            # ⚠️ NOTE: 'balance' is not defined here in this scope.
-            # This may cause an error unless balance is managed inside trasnctionmenu()            
-            transaction_menu(account_number, balance, transaction_history)
 
-        # -----------------------------
+
+
+        # ----------------------------
         # 6. EXIT PROGRAM
         # -----------------------------
         elif choice == '6':
