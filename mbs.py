@@ -5,10 +5,8 @@
 # Importing required functions from other modules
 
 from Account import cardpin, create_account, view_account_details, generate_account_number
-from Transction import transaction_menu
+import transction as tr
 import Update as up
-from Transction import Account as TxAccount  # import correctly
-
 
 class Account:
     # Program starts here (runs immediately when file is executed)
@@ -72,8 +70,8 @@ class Account:
         # -----------------------------
         # 5. MAKE A TRANSACTION
         # -----------------------------
-
-
+        elif choice == '5':
+            tr.transaction_menu()  # Call the transaction menu function from the transction module
 
         # ----------------------------
         # 6. EXIT PROGRAM
