@@ -1,5 +1,6 @@
 # ---------------- TRANSACTION MODULE USING EXCEL FILE ---------------- #
 
+
 # Import library
 from openpyxl import load_workbook
 
@@ -40,7 +41,7 @@ def update_balance(account_number, amount, transaction_type):
         if excel_account == account_number:
 
             # Get current balance
-            current_balance = sheet.cell(row=row, column=2).value
+            current_balance = sheet.cell(row=row, column=7).value
 
             # Deposit
             if transaction_type == "Deposit":
@@ -57,7 +58,7 @@ def update_balance(account_number, amount, transaction_type):
                 new_balance = current_balance - amount
 
             # Update balance in Excel
-            sheet.cell(row=row, column=2).value = new_balance
+            sheet.cell(row=row, column=7).value = new_balance
 
             # Save workbook
             workbook.save("details.xlsx")
@@ -79,7 +80,8 @@ def transaction_menu():
         print("\n========== Transaction Menu ==========")
         print("1. Deposit")
         print("2. Withdraw")
-        print("3. Exit")
+        print("3. Transaction History")
+        print("4. Exit")
 
         choice = input("Select an option: ")
 
@@ -121,8 +123,14 @@ def transaction_menu():
             # Display transaction details
             transaction.display_transaction()
 
-        # ---------------- EXIT ---------------- #
+        # ---------------- TRANSACTION HISTORY ---------------- #
         elif choice == '3':
+
+            account_number = input("Enter account number: ")
+            display_transaction_history(account_number)
+
+        # ---------------- EXIT ---------------- #
+        elif choice == '4':
 
             print("Exiting Transaction Module...")
             break
