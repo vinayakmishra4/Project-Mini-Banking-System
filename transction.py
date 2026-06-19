@@ -1,20 +1,19 @@
 # ---------------- TRANSACTION MODULE USING EXCEL FILE ---------------- #
 
-
-# Import library
 from openpyxl import load_workbook
+from datetime import datetime
+import os
 
 
-# Transaction class
+# ---------------- TRANSACTION CLASS ---------------- #
+
 class Transaction:
 
-    # Constructor
     def __init__(self, account_number, amount, transaction_type):
         self.account_number = account_number
         self.amount = amount
         self.transaction_type = transaction_type
 
-    # Display transaction details
     def display_transaction(self):
         print("\n--- Transaction Details ---")
         print("Account Number :", self.account_number)
@@ -22,57 +21,114 @@ class Transaction:
         print("Amount :", self.amount)
 
 
-# Function to update balance in Excel file
-def update_balance(account_number, amount, transaction_type):
+# ---------------- SAVE TRANSACTION HISTORY ---------------- #
 
-    # Load Excel workbook
+def save_transaction(account_number, amount, transaction_type):
+
     workbook = load_workbook("details.xlsx")
 
-    # Select active sheet
+    if "TransactionHistory" not in workbook.sheetnames:
+
+        sheet = workbook.create_sheet("TransactionHistory")
+
+        sheet.append([
+            "Account Number",
+            "Transaction Type",
+            "Amount",
+            "Date & Time"
+        ])
+
+    else:
+        sheet = workbook["TransactionHistory"]
+
+    sheet.append([
+        account_number,
+        transaction_type,
+        amount,
+        datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    ])
+
+    workbook.save("details.xlsx")
+
+
+# ---------------- UPDATE BALANCE ---------------- #
+
+def update_balance(account_number, amount, transaction_type):
+
+    workbook = load_workbook("details.xlsx")
     sheet = workbook.active
 
-    # Loop through rows
     for row in range(2, sheet.max_row + 1):
 
-        # Get account number from Excel
         excel_account = str(sheet.cell(row=row, column=1).value)
 
-        # Match account number
         if excel_account == account_number:
 
-            # Get current balance
             current_balance = sheet.cell(row=row, column=7).value
 
-            # Deposit
             if transaction_type == "Deposit":
+
                 new_balance = current_balance + amount
 
-            # Withdraw
             elif transaction_type == "Withdraw":
 
-                # Check sufficient balance
                 if amount > current_balance:
                     print("Insufficient Balance!")
-                    return
+                    return False
 
                 new_balance = current_balance - amount
 
-            # Update balance in Excel
             sheet.cell(row=row, column=7).value = new_balance
 
-            # Save workbook
             workbook.save("details.xlsx")
 
             print("\nBalance Updated Successfully!")
             print("Updated Balance :", new_balance)
 
-            return
+            return True
 
-    # If account not found
     print("Account not found!")
+    return False
+
+# ---------------- VIEW TRANSACTION HISTORY ---------------- #
+
+def view_transaction_history(account_number):
+
+    file_name = "transaction_history.xlsx"
+
+    if not os.path.exists(file_name):
+        print("\nNo transaction history found.")
+        return
+
+    workbook = load_workbook(file_name)
+    sheet = workbook["TransactionHistory"]
+
+    found = False
+
+    print("\n========== TRANSACTION HISTORY ==========")
+
+    for row in range(2, sheet.max_row + 1):
+
+        if str(sheet.cell(row=row, column=1).value) == account_number:
+
+            found = True
+
+            transaction_type = sheet.cell(row=row, column=2).value
+            amount = sheet.cell(row=row, column=3).value
+            date_time = sheet.cell(row=row, column=4).value
+
+            print(
+                f"Type: {transaction_type} | "
+                f"Amount: {amount} | "
+                f"Date: {date_time}"
+            )
+
+    if not found:
+        print("No transactions found for this account.")
 
 
-# Transaction menu
+# ---------------- TRANSACTION MENU ---------------- #
+
 def transaction_menu():
 
     while True:
@@ -86,58 +142,80 @@ def transaction_menu():
         choice = input("Select an option: ")
 
         # ---------------- DEPOSIT ---------------- #
+
         if choice == '1':
 
             account_number = input("Enter account number: ")
             amount = float(input("Enter amount to deposit: "))
 
-            # Create transaction object
             transaction = Transaction(
                 account_number,
                 amount,
                 "Deposit"
             )
 
-            # Update Excel balance
-            update_balance(account_number, amount, "Deposit")
+            success = update_balance(
+                account_number,
+                amount,
+                "Deposit"
+            )
 
-            # Display transaction details
-            transaction.display_transaction()
+            if success:
+                save_transaction(
+                    account_number,
+                    amount,
+                    "Deposit"
+                )
+                transaction.display_transaction()
 
         # ---------------- WITHDRAW ---------------- #
+
         elif choice == '2':
 
             account_number = input("Enter account number: ")
             amount = float(input("Enter amount to withdraw: "))
 
-            # Create transaction object
             transaction = Transaction(
                 account_number,
                 amount,
                 "Withdraw"
             )
 
-            # Update Excel balance
-            update_balance(account_number, amount, "Withdraw")
+            success = update_balance(
+                account_number,
+                amount,
+                "Withdraw"
+            )
 
-            # Display transaction details
-            transaction.display_transaction()
+            if success:
+                save_transaction(
+                    account_number,
+                    amount,
+                    "Withdraw"
+                )
+                transaction.display_transaction()
 
         # ---------------- TRANSACTION HISTORY ---------------- #
+
         elif choice == '3':
 
-            account_number = input("Enter account number: ")
-            display_transaction_history(account_number)
+            account_number = input(
+                "Enter account number: "
+            )
+
+            view_transaction_history(
+                account_number
+            )
 
         # ---------------- EXIT ---------------- #
+
         elif choice == '4':
 
             print("Exiting Transaction Module...")
             break
 
         # ---------------- INVALID OPTION ---------------- #
+
         else:
             print("Invalid option! Please try again.")
 
-
-# ---------------- DRIVER CODE ---------------- #
