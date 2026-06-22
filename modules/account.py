@@ -1,27 +1,31 @@
-# importing necessary libraries
+# ------------------------------------------------------------
+# Account Module
+# Handles: account number generation, account creation,
+#          card PIN setup, and viewing account details.
+# ------------------------------------------------------------
+
 import random
-import pandas as pd
 import os
+import pandas as pd
+
+# All Excel data files now live in the data/ folder instead of
+# cluttering the project root.
+DATA_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data")
+DETAILS_FILE = os.path.join(DATA_DIR, "details.xlsx")
+PIN_FILE = os.path.join(DATA_DIR, "pin.xlsx")
 
 
-# ------------------------------------------------------------
-# Function: generate_account_number
-# Purpose : Generate a random 10-digit account number
-# ------------------------------------------------------------
 def generate_account_number():
+    """Generate a random 10-digit account number (as a string)."""
     # randint ensures a 10-digit number between given range
     # converted to string so it can be safely stored in Excel
     return str(random.randint(1000000000, 9999999999))
 
 
-# ------------------------------------------------------------
-# Function: create_account
-# Purpose : Create a new bank account and save details in Excel
-# ------------------------------------------------------------
 def create_account(account_number, name, dob, address, phone, email, balance):
+    """Create a new bank account and save details in Excel."""
     print("Creating a new account...")
 
-    # Store all user inputs in a dictionary (one record)
     account = {
         "account_number": account_number,
         "name": name,
@@ -32,12 +36,11 @@ def create_account(account_number, name, dob, address, phone, email, balance):
         "balance": balance,
     }
 
-    # Excel file where all account records are stored
-    file_name = "details.xlsx"
+    os.makedirs(DATA_DIR, exist_ok=True)
 
     # If file already exists, load it; otherwise create empty structure
-    if os.path.exists(file_name):
-        df = pd.read_excel(file_name)
+    if os.path.exists(DETAILS_FILE):
+        df = pd.read_excel(DETAILS_FILE)
     else:
         df = pd.DataFrame(columns=[
             "account_number", "name", "dob",
@@ -48,20 +51,15 @@ def create_account(account_number, name, dob, address, phone, email, balance):
     df = pd.concat([df, pd.DataFrame([account])], ignore_index=True)
 
     # Save updated data back to Excel
-    df.to_excel(file_name, index=False)
-
+    df.to_excel(DETAILS_FILE, index=False)
     print(f"Account {account_number} created successfully!")
     return account
 
 
-# ------------------------------------------------------------
-# Function: cardpin
-# Purpose : Set or update a 4-digit PIN for an account
-# ------------------------------------------------------------
 def cardpin(account_number):
+    """Set or update a 4-digit PIN for an account."""
     print("Setting up card PIN...")
 
-    # Take PIN input from user
     pin = input("Enter a 4-digit PIN: ")
 
     # Validate PIN: must be exactly 4 digits and numeric
@@ -69,12 +67,10 @@ def cardpin(account_number):
         print("Invalid PIN. Please enter a 4-digit number.")
         pin = input("Enter a 4-digit PIN: ")
 
-    # File where PINs are stored
-    pin_file = "pin.xlsx"
+    os.makedirs(DATA_DIR, exist_ok=True)
 
-    # Load existing PIN data or create new structure
-    if os.path.exists(pin_file):
-        df_pin = pd.read_excel(pin_file)
+    if os.path.exists(PIN_FILE):
+        df_pin = pd.read_excel(PIN_FILE)
     else:
         df_pin = pd.DataFrame(columns=["account_number", "pin"])
 
@@ -87,28 +83,17 @@ def cardpin(account_number):
         ignore_index=True
     )
 
-    # Save updated PIN data
-    df_pin.to_excel(pin_file, index=False)
-
+    df_pin.to_excel(PIN_FILE, index=False)
     print(f"PIN for account {account_number} set successfully!")
     return pin
 
 
-# ------------------------------------------------------------
-# Function: view_account_details
-# Purpose : Display stored details of a specific account
-# ------------------------------------------------------------
 def view_account_details(account_number):
-    import os
-    import pandas as pd
-
+    """Display stored details of a specific account."""
     print("Viewing account details...")
 
-    file_name = "details.xlsx"
-
-    if os.path.exists(file_name):
-        df = pd.read_excel(file_name, dtype={"account_number": str})
-
+    if os.path.exists(DETAILS_FILE):
+        df = pd.read_excel(DETAILS_FILE, dtype={"account_number": str})
         df["account_number"] = df["account_number"].str.strip()
         account_number = str(account_number).strip()
 
