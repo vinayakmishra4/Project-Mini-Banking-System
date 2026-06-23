@@ -1,22 +1,25 @@
 # ==============================
 # Mini Bank System (Console App)
 # ==============================
+import os
+import sys
 
-# Importing required functions from other modules
+# Make sure the project root (this file's folder) is on sys.path so the
+# "modules" package can be found no matter where mbs.py is run from
+# (double-clicked, run from another directory, run inside an IDE, etc.)
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from Account import cardpin, create_account, view_account_details, generate_account_number
-import transction as tr
-import Update as up
+# Importing required functions from the modules package
+from modules.account import cardpin, create_account, view_account_details, generate_account_number
+import modules.transaction as tr
+import modules.update as up
 
-class Account:
-    # Program starts here (runs immediately when file is executed)
-    
+
+def main():
     print("Welcome to the Mini Bank System!")
 
     # Infinite loop to keep the menu running until user exits
     while True:
-
-        # Displaying main menu options
         print("\nPlease select an option:")
         print("1. Create Account")
         print("2. Set Card PIN")
@@ -25,7 +28,6 @@ class Account:
         print("5. Transaction")
         print("6. Exit")
 
-        # Taking user input for menu selection
         choice = input()
 
         # -----------------------------
@@ -40,7 +42,6 @@ class Account:
             email = input("Enter email: ")
             balance = float(input("Enter initial balance: "))
 
-            # Create and store account details
             create_account(account_number, name, dob, address, phone, email, balance)
 
         # -----------------------------
@@ -56,8 +57,8 @@ class Account:
         elif choice == '3':
             print("Update Account Details")
             account_number = input("Enter account number to update details: ")
-            manager=up.AccountManager('details.xlsx')  # Create an instance of AccountManager to access update functions
-            manager.update_account(account_number)  # Call the update_account method with the provided account number
+            manager = up.AccountManager()
+            manager.update_account(account_number)
 
         # -----------------------------
         # 4. VIEW ACCOUNT DETAILS
@@ -71,9 +72,9 @@ class Account:
         # 5. MAKE A TRANSACTION
         # -----------------------------
         elif choice == '5':
-            tr.transaction_menu()  # Call the transaction menu function from the transction module
+            tr.transaction_menu()
 
-        # ----------------------------
+        # -----------------------------
         # 6. EXIT PROGRAM
         # -----------------------------
         elif choice == '6':
@@ -85,3 +86,7 @@ class Account:
         # -----------------------------
         else:
             print("Invalid choice. Please try again.")
+
+
+if __name__ == "__main__":
+    main()
