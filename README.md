@@ -43,13 +43,27 @@ Project-Mini-Banking-System/
 <details>
 <summary>📌 View source files on GitHub</summary>
 
-| File | Purpose |
-|---|---|
-| [mbs.py](https://github.com/vinayakmishra4/Project-Mini-Banking-System/blob/main/mbs.py) | Main entry point — displays the menu and routes user choices |
-| [modules/account.py](https://github.com/vinayakmishra4/Project-Mini-Banking-System/blob/main/modules/account.py) | Account creation, account number generation, PIN setup, view details |
-| [modules/transaction.py](https://github.com/vinayakmishra4/Project-Mini-Banking-System/blob/main/modules/transaction.py) | Deposit, withdraw, balance updates, transaction history |
-| [modules/update.py](https://github.com/vinayakmishra4/Project-Mini-Banking-System/blob/main/modules/update.py) | `AccountManager` class — find and update account fields |
-| [requirements.txt](https://github.com/vinayakmishra4/Project-Mini-Banking-System/blob/main/requirements.txt) | Project dependencies |
+<br>
+
+**🚀 `mbs.py`**
+Main entry point — displays the menu and routes user choices
+`https://github.com/vinayakmishra4/Project-Mini-Banking-System/blob/main/mbs.py`
+
+**🧾 `modules/account.py`**
+Account creation, account number generation, PIN setup, view details
+`https://github.com/vinayakmishra4/Project-Mini-Banking-System/blob/main/modules/account.py`
+
+**💸 `modules/transaction.py`**
+Deposit, withdraw, balance updates, transaction history
+`https://github.com/vinayakmishra4/Project-Mini-Banking-System/blob/main/modules/transaction.py`
+
+**✏️ `modules/update.py`**
+`AccountManager` class — find and update account fields
+`https://github.com/vinayakmishra4/Project-Mini-Banking-System/blob/main/modules/update.py`
+
+**📦 `requirements.txt`**
+Project dependencies
+`https://github.com/vinayakmishra4/Project-Mini-Banking-System/blob/main/requirements.txt`
 
 </details>
 
@@ -132,5 +146,3 @@ Please select an option:
 ---
 
 ⭐ If you found this project useful, consider giving it a star on [GitHub](https://github.com/vinayakmishra4/Project-Mini-Banking-System)!
-
----
