@@ -47,23 +47,23 @@ Project-Mini-Banking-System/
 
 **🚀 `mbs.py`**
 Main entry point — displays the menu and routes user choices
-`https://github.com/vinayakmishra4/Project-Mini-Banking-System/blob/main/mbs.py`
+[View on GitHub →](https://github.com/vinayakmishra4/Project-Mini-Banking-System/blob/main/mbs.py)
 
 **🧾 `modules/account.py`**
 Account creation, account number generation, PIN setup, view details
-`https://github.com/vinayakmishra4/Project-Mini-Banking-System/blob/main/modules/account.py`
+[View on GitHub →](https://github.com/vinayakmishra4/Project-Mini-Banking-System/blob/main/modules/account.py)
 
 **💸 `modules/transaction.py`**
 Deposit, withdraw, balance updates, transaction history
-`https://github.com/vinayakmishra4/Project-Mini-Banking-System/blob/main/modules/transaction.py`
+[View on GitHub →](https://github.com/vinayakmishra4/Project-Mini-Banking-System/blob/main/modules/transaction.py)
 
 **✏️ `modules/update.py`**
 `AccountManager` class — find and update account fields
-`https://github.com/vinayakmishra4/Project-Mini-Banking-System/blob/main/modules/update.py`
+[View on GitHub →](https://github.com/vinayakmishra4/Project-Mini-Banking-System/blob/main/modules/update.py)
 
 **📦 `requirements.txt`**
 Project dependencies
-`https://github.com/vinayakmishra4/Project-Mini-Banking-System/blob/main/requirements.txt`
+[View on GitHub →](https://github.com/vinayakmishra4/Project-Mini-Banking-System/blob/main/requirements.txt)
 
 </details>
 
@@ -126,6 +126,8 @@ Please select an option:
 
 ## ⚠️ Known Issues / Limitations
 
+- `mbs.py`'s imports don't match the current `modules/` layout — it still runs `from Account import ...`, `import transction as tr`, and `import Update as up` (the pre-refactor names), so running `python mbs.py` as currently committed raises `ModuleNotFoundError`. These need to be updated to `from modules.account import ...`, `import modules.transaction as tr`, and `import modules.update as up`.
+- "Update Account Details" looks in the wrong file — the update flow creates `AccountManager('details.xlsx')` with a bare filename instead of the `data/details.xlsx` path every other feature uses, so it currently can't find any existing accounts.
 - No login/authentication flow — PIN is stored but not currently used to gate access to account actions.
 - No input sanitization beyond basic PIN validation; invalid data (e.g. malformed email/phone) can still be saved.
 - Uses Excel files as a "database," which doesn't scale well and isn't safe for concurrent access.
